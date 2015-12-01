@@ -45,14 +45,15 @@ class ViewController: UIViewController, MGLMapViewDelegate {
     }
 
     func circleImageWithRadius(radius: Int, color: UIColor) -> UIImage {
-        let rect = CGRect(x: 0, y: 0, width: radius * 2 + 2, height: radius * 2 + 2)
+        let buffer = 2
+        let rect = CGRect(x: 0, y: 0, width: radius * 2 + buffer, height: radius * 2 + buffer)
         UIGraphicsBeginImageContextWithOptions(rect.size, false, UIScreen.mainScreen().scale)
         let context = UIGraphicsGetCurrentContext()
         CGContextSetFillColorWithColor(context, color.colorWithAlphaComponent(0.25).CGColor)
         CGContextSetStrokeColorWithColor(context, color.colorWithAlphaComponent(0.75).CGColor)
         CGContextSetLineWidth(context, 1)
-        CGContextFillEllipseInRect(context, CGRectInset(rect, 4, 4))
-        CGContextStrokeEllipseInRect(context, CGRectInset(rect, 4, 4))
+        CGContextFillEllipseInRect(context, CGRectInset(rect, CGFloat(buffer * 2), CGFloat(buffer * 2)))
+        CGContextStrokeEllipseInRect(context, CGRectInset(rect, CGFloat(buffer * 2), CGFloat(buffer * 2)))
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
