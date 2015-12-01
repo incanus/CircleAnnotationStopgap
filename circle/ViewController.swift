@@ -21,23 +21,30 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         if let pointsURL = NSURL(string: "https://git.io/vB57T") {
             NSURLSession.sharedSession().dataTaskWithURL(pointsURL, completionHandler: {
                 [unowned self] maybeFeaturesData, response, maybeFeaturesError in
-                if let featuresData = maybeFeaturesData,
-                  let featuresJSON = try? NSJSONSerialization.JSONObjectWithData(featuresData, options: []) as? JSON,
-                  let features = featuresJSON?["features"] as? [JSON] {
-                    for i in 0..<50 {
-                        let feature = features[i]
-                        if let geometry = feature["geometry"] as? JSON,
-                          let coordinates = geometry["coordinates"] as? [Double] {
-                          let lon = coordinates[0]
-                          let lat = coordinates[1]
-                          let point = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                            let circle = MGLPointAnnotation()
-                            circle.coordinate = point
-                            self.map.addAnnotation(circle)
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    [unowned self] in
+                    if let featuresData = maybeFeaturesData,
+                      let featuresJSON = try? NSJSONSerialization.JSONObjectWithData(featuresData, options: []) as? JSON,
+                      let features = featuresJSON?["features"] as? [JSON] {
+                        var annotations = [MGLAnnotation]()
+                        for i in 0..<50 {
+                            let feature = features[i]
+                            if let geometry = feature["geometry"] as? JSON,
+                              let coordinates = geometry["coordinates"] as? [Double] {
+                              let lon = coordinates[0]
+                              let lat = coordinates[1]
+                              let point = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                                let circle = MGLPointAnnotation()
+                                circle.coordinate = point
+                                annotations.append(circle)
+                            }
                         }
-                    }
-                    if let annotations = self.map.annotations {
-                        self.map.showAnnotations(annotations, animated: false)
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.map.addAnnotations(annotations)
+                            if let annotations = self.map.annotations {
+                                self.map.showAnnotations(annotations, animated: false)
+                            }
+                        }
                     }
                 }
             }).resume()
