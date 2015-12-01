@@ -52,7 +52,7 @@ class ViewController: UIViewController, MGLMapViewDelegate {
     }
 
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        let radius = Int(arc4random_uniform(20) + 1) + 10
+        let radius = Int(arc4random_uniform(20)) + 10
         let colorIndex = Int(arc4random_uniform(6))
         let color = [
             UIColor.redColor(),
