@@ -51,21 +51,6 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         }
     }
 
-    func circleImageWithRadius(radius: Int, color: UIColor) -> UIImage {
-        let buffer = 2
-        let rect = CGRect(x: 0, y: 0, width: radius * 2 + buffer, height: radius * 2 + buffer)
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, UIScreen.mainScreen().scale)
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, color.colorWithAlphaComponent(0.25).CGColor)
-        CGContextSetStrokeColorWithColor(context, color.colorWithAlphaComponent(0.75).CGColor)
-        CGContextSetLineWidth(context, 1)
-        CGContextFillEllipseInRect(context, CGRectInset(rect, CGFloat(buffer * 2), CGFloat(buffer * 2)))
-        CGContextStrokeEllipseInRect(context, CGRectInset(rect, CGFloat(buffer * 2), CGFloat(buffer * 2)))
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
-    }
-
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
         let radius = Int(arc4random_uniform(20) + 1) + 10
         let colorIndex = Int(arc4random_uniform(6))
@@ -84,6 +69,21 @@ class ViewController: UIViewController, MGLMapViewDelegate {
             let image = circleImageWithRadius(radius, color: color)
             return MGLAnnotationImage(image: image, reuseIdentifier: identifier)
         }
+    }
+
+    func circleImageWithRadius(radius: Int, color: UIColor) -> UIImage {
+        let buffer = 2
+        let rect = CGRect(x: 0, y: 0, width: radius * 2 + buffer, height: radius * 2 + buffer)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, UIScreen.mainScreen().scale)
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(context, color.colorWithAlphaComponent(0.25).CGColor)
+        CGContextSetStrokeColorWithColor(context, color.colorWithAlphaComponent(0.75).CGColor)
+        CGContextSetLineWidth(context, 1)
+        CGContextFillEllipseInRect(context, CGRectInset(rect, CGFloat(buffer * 2), CGFloat(buffer * 2)))
+        CGContextStrokeEllipseInRect(context, CGRectInset(rect, CGFloat(buffer * 2), CGFloat(buffer * 2)))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
 
 }
