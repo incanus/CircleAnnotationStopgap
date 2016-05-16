@@ -34,12 +34,13 @@ class ViewController: UIViewController, MGLMapViewDelegate {
                               let lon = coordinates[0]
                               let lat = coordinates[1]
                                 
-                                
+                             // proportionally sized circles
                             let c = CLLocationCoordinate2D(latitude: lat, longitude: lon)
                             let radius:Double = Double(arc4random_uniform(20)) + 100
                             let pt0 = self.polygonCircleForCoordinate(c, withMeterRadius:radius)
-                           
-                             annotations.append(pt0)
+                            annotations.append(pt0)
+                                
+                            // UIImage overlay
                              let pt1 = MGLPointAnnotation()
                               pt1.coordinate = c
                               annotations.append(pt1)
@@ -75,9 +76,44 @@ class ViewController: UIViewController, MGLMapViewDelegate {
             let point: CLLocationCoordinate2D = CLLocationCoordinate2DMake(pointLat, pointLon)
             coordinates.append(point)
         }
+ 
         
         let polygon = MGLPolygon(coordinates: &coordinates, count: UInt(coordinates.count))
         return polygon
+    }
+    
+    func mapView(mapView: MGLMapView, alphaForShapeAnnotation annotation: MGLShape) -> CGFloat {
+        return 0.5
+    }
+    
+    func mapView(mapView: MGLMapView, strokeColorForShapeAnnotation annotation: MGLShape) -> UIColor {
+        // change the colors
+        let colorIndex = Int(arc4random_uniform(6))
+        let color = [
+            UIColor.redColor(),
+            UIColor.blueColor(),
+            UIColor.greenColor(),
+            UIColor.purpleColor(),
+            UIColor.magentaColor(),
+            UIColor.yellowColor()
+            ][colorIndex]
+        
+        return color
+    }
+    
+    func mapView(mapView: MGLMapView, fillColorForPolygonAnnotation annotation: MGLPolygon) -> UIColor {
+        //return UIColor(red: 59/255, green: 178/255, blue: 208/255, alpha: 1)
+        let colorIndex = Int(arc4random_uniform(6))
+        let color = [
+            UIColor.redColor(),
+            UIColor.blueColor(),
+            UIColor.greenColor(),
+            UIColor.purpleColor(),
+            UIColor.magentaColor(),
+            UIColor.yellowColor()
+            ][colorIndex]
+        
+        return color
     }
     
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
