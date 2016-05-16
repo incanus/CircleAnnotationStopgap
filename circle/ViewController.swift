@@ -18,7 +18,7 @@ class ViewController: UIViewController, MGLMapViewDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        if let pointsURL = NSURL(string: "https://git.io/vB57T") {
+        if let pointsURL = NSURL(string: "https://raw.githubusercontent.com/mapbox/mapbox-gl-native/1ee14915f8484f22abb59b7ecdb48e197e6dbf38/platform/ios/app/points.geojson") {
             NSURLSession.sharedSession().dataTaskWithURL(pointsURL, completionHandler: {
                 [unowned self] maybeFeaturesData, response, maybeFeaturesError in
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
